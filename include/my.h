@@ -22,5 +22,6 @@ int my_putstr(char const *);
 int my_strlen(char const *);
 char *my_strcpy(char *dest, char const *src);
 char my_strlowcase(char str);
+int my_strcmp(char const *s1, char const *s2);
 
 #endif //MY_H_

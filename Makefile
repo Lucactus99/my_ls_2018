@@ -10,9 +10,12 @@
 CC      =       gcc
 
 SRC     =   main.c \
-            my_strlen.c \
-            my_strcpy.c \
-            my_strlowcase.c
+            src/my_strlen.c \
+            src/my_strcpy.c \
+            src/my_strlowcase.c \
+            src/my_putstr.c \
+            src/my_putchar.c \
+            src/my_strcmp.c
 
 OBJ     =       $(SRC:.c=.o)
 
