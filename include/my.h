@@ -17,6 +17,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+struct options
+{
+    int dir_bool;
+    int bool_a;
+    int bool_a_maj;
+    int bool_d;
+    int bool_1;
+    char *path;
+    int lines_display;
+};
+
 void my_putchar(char);
 int my_putstr(char const *);
 int my_strlen(char const *);
