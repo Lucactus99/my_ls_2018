@@ -16,6 +16,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <dirent.h>
+#include <pwd.h>
+#include <sys/types.h>
+#include <time.h>
+#include <grp.h>
 
 struct options
 {
@@ -24,6 +30,8 @@ struct options
     int bool_a_maj;
     int bool_d;
     int bool_1;
+    int bool_l;
+    long total_size;
     char *path;
     int lines_display;
 };
@@ -34,5 +42,9 @@ int my_strlen(char const *);
 char *my_strcpy(char *dest, char const *src);
 char my_strlowcase(char str);
 int my_strcmp(char const *s1, char const *s2);
+char *my_strcat(char *dest, char const *src);
+int my_getnbr(char *str);
+int my_put_nbr(int nb);
+
 
 #endif //MY_H_

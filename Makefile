@@ -15,7 +15,8 @@ SRC     =   main.c \
             src/my_strlowcase.c \
             src/my_putstr.c \
             src/my_putchar.c \
-            src/my_strcmp.c
+            src/my_strcmp.c \
+            src/my_put_nbr.c
 
 OBJ     =       $(SRC:.c=.o)
 
