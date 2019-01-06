@@ -7,13 +7,25 @@
 
 #include "my.h"
 
-void display_ls(char **files, int nbr)
+void display_ls(char **files, int nbr, struct options *opt)
 {
+    struct stat statbuff;
+
     for (int i = 0; i < nbr; i++) {
+        stat(files[i], &statbuff);
         if (files[i][0] != '.') {
+            if (opt->bool_i == 1) {
+                my_put_nbr(statbuff.st_ino);
+                my_putchar(' ');
+            }
             my_putstr(files[i]);
-            if (i + 1 < nbr)
-                my_putstr("  ");
+            if (i + 1 < nbr) {
+                if (opt->bool_m == 1)
+                    my_putchar(',');
+                else
+                    my_putchar(' ');
+                my_putchar(' ');
+            }
         }
     }
     my_putchar('\n');
@@ -39,9 +51,16 @@ void display_a_maj(char **files, int nbr)
     exit(0);
 }
 
-void display_a(char **files, int nbr)
+void display_a(char **files, int nbr, struct options *opt)
 {
+    struct stat statbuff;
+
     for (int i = 0; i < nbr; i++) {
+        stat(files[i], &statbuff);
+        if (opt->bool_i == 1) {
+            my_put_nbr(statbuff.st_ino);
+            my_putchar(' ');
+        }
         my_putstr(files[i]);
         my_putstr("  ");
     }
@@ -81,6 +100,10 @@ void display_l(char **files, int nbr, struct options *opt)
     for (int i = 0; i < nbr; i++) {
         if (files[i][0] != '.' || opt->bool_a == 1) {
             stat(files[i], &statbuff);
+            if (opt->bool_i == 1) {
+                my_put_nbr(statbuff.st_ino);
+                my_putchar(' ');
+            }
             my_putstr((S_ISDIR(statbuff.st_mode)) ? "d" : "-");
             my_putstr((statbuff.st_mode & S_IRUSR) ? "r" : "-");
             my_putstr((statbuff.st_mode & S_IWUSR) ? "w" : "-");

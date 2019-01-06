@@ -30,8 +30,10 @@ struct options
     int bool_a_maj;
     int bool_d;
     int bool_f;
+    int bool_i;
     int bool_1;
     int bool_l;
+    int bool_m;
     int bool_r;
     long total_size;
     char *path;
@@ -52,10 +54,10 @@ char **option_a(char **, int, int, struct options *);
 void put_space_size(struct stat, int, char **, int);
 void put_space_day(struct tm *, int, struct options *);
 void print_month(struct tm *);
-void display_ls(char **files, int nbr);
+void display_ls(char **files, int nbr, struct options *opt);
 void display_l(char **files, int nbr, struct options *opt);
 void display_one(char **files, int nbr, struct options *opt);
-void display_a(char **files, int nbr);
+void display_a(char **files, int nbr, struct options *opt);
 void display_a_maj(char **files, int nbr);
 void display_d(struct options *opt);
 

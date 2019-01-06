@@ -16,11 +16,11 @@ void condition_display(int ac, struct options *opt, int nbr, char **files)
     if (opt->bool_1 == 1)
         display_one(files, nbr, opt);
     if (opt->bool_a == 1 || opt->bool_f == 1)
-        display_a(files, nbr);
+        display_a(files, nbr, opt);
     if (opt->bool_a_maj == 1)
         display_a_maj(files, nbr);
-    if (ac == 1 || (ac == 2 && opt->dir_bool == 1) || opt->bool_r == 1)
-        display_ls(files, nbr);
+    if (ac == 1 || (ac == 2 && opt->dir_bool == 1) || opt->bool_r == 1 || opt->bool_i == 1 || opt->bool_m == 1)
+        display_ls(files, nbr, opt);
 }
 
 int main(int ac, char const *const *av)
