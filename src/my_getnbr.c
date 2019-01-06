@@ -59,7 +59,7 @@ int int_limit(char *str)
     } else {
         value2++;
         while (cmp2[value] != 0 && str[value2] != 0 &&
-            cmp2[value] == str[value2]) {
+        cmp2[value] == str[value2]) {
             value++;
             value2++;
         }
@@ -72,7 +72,7 @@ int my_getnbr(char *str)
     int value = int_limit(str);
     int actual_nbr;
     int lenght = my_strlen2(str) - 1;
-    int neg  = 0;
+    int neg = 0;
 
     if (value < 0)
         return (0);

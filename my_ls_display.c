@@ -7,29 +7,12 @@
 
 #include "my.h"
 
-void display_ls(char **files, int nbr, struct options *opt)
+void display_i(struct options *opt, struct stat statbuff)
 {
-    struct stat statbuff;
-
-    for (int i = 0; i < nbr; i++) {
-        stat(files[i], &statbuff);
-        if (files[i][0] != '.') {
-            if (opt->bool_i == 1) {
-                my_put_nbr(statbuff.st_ino);
-                my_putchar(' ');
-            }
-            my_putstr(files[i]);
-            if (i + 1 < nbr) {
-                if (opt->bool_m == 1)
-                    my_putchar(',');
-                else
-                    my_putchar(' ');
-                my_putchar(' ');
-            }
-        }
+    if (opt->bool_i == 1) {
+        my_put_nbr(statbuff.st_ino);
+        my_putchar(' ');
     }
-    my_putchar('\n');
-    exit(0);
 }
 
 void display_d(struct options *opt)
@@ -51,100 +34,39 @@ void display_a_maj(char **files, int nbr)
     exit(0);
 }
 
-void display_a(char **files, int nbr, struct options *opt)
+void display_l(struct options *opt)
 {
     struct stat statbuff;
 
-    for (int i = 0; i < nbr; i++) {
-        stat(files[i], &statbuff);
-        if (opt->bool_i == 1) {
-            my_put_nbr(statbuff.st_ino);
-            my_putchar(' ');
-        }
-        my_putstr(files[i]);
-        my_putstr("  ");
-    }
-    my_putchar('\n');
-    exit(0);
-}
-
-void display_one(char **files, int nbr, struct options *opt)
-{
-    for (int i = 0; i < nbr; i++) {
-        if (files[i][0] != '.' || opt->bool_a == 1) {
-            my_putstr(files[i]);
+    display_l_total_size(opt->nbr, opt, statbuff);
+    for (int i = 0; i < opt->nbr; i++) {
+        if (opt->files[i][0] != '.' || opt->bool_a == 1) {
+            stat(opt->files[i], &statbuff);
+            display_i(opt, statbuff);
+            display_l_permissions(statbuff);
+            display_l_links(statbuff);
+            display_l_owner_user(statbuff, opt);
+            display_l_size(statbuff, opt->nbr, i, opt->files);
+            display_l_time(statbuff, opt->nbr, opt);
+            my_putstr(opt->files[i]);
             my_putchar('\n');
         }
     }
     exit(0);
 }
 
-void display_l(char **files, int nbr, struct options *opt)
+void condition_display(int ac, struct options *opt, char const *const *av)
 {
-    struct stat statbuff;
-    struct passwd *pwd;
-    struct group *gr;
-    struct tm *timer;
-
-    for (int i = 0; i < nbr; i++) {
-        if (files[i][0] != '.' || opt->bool_a == 1) {
-            stat(files[i], &statbuff);
-            opt->total_size += statbuff.st_blocks / 2;
-        }
-    }
-    pwd = getpwuid(statbuff.st_uid);
-    gr = getgrgid(statbuff.st_gid);
-    my_putstr("total ");
-    my_put_nbr(opt->total_size);
-    my_putchar('\n');
-    for (int i = 0; i < nbr; i++) {
-        if (files[i][0] != '.' || opt->bool_a == 1) {
-            stat(files[i], &statbuff);
-            if (opt->bool_i == 1) {
-                my_put_nbr(statbuff.st_ino);
-                my_putchar(' ');
-            }
-            my_putstr((S_ISDIR(statbuff.st_mode)) ? "d" : "-");
-            my_putstr((statbuff.st_mode & S_IRUSR) ? "r" : "-");
-            my_putstr((statbuff.st_mode & S_IWUSR) ? "w" : "-");
-            my_putstr((statbuff.st_mode & S_IXUSR) ? "x" : "-");
-            my_putstr((statbuff.st_mode & S_IRGRP) ? "r" : "-");
-            my_putstr((statbuff.st_mode & S_IWGRP) ? "w" : "-");
-            my_putstr((statbuff.st_mode & S_IXGRP) ? "x" : "-");
-            my_putstr((statbuff.st_mode & S_IROTH) ? "r" : "-");
-            my_putstr((statbuff.st_mode & S_IWOTH) ? "w" : "-");
-            my_putstr((statbuff.st_mode & S_IXOTH) ? "x" : "-");
-            my_putchar(' ');
-            my_put_nbr(statbuff.st_nlink);
-            my_putchar(' ');
-            if (opt->bool_n == 1)
-                my_put_nbr(statbuff.st_uid);
-            else
-                my_putstr(pwd->pw_name);
-            my_putchar(' ');
-            if (opt->bool_n == 1)
-                my_put_nbr(statbuff.st_gid);
-            else
-                my_putstr(gr->gr_name);
-            put_space_size(statbuff, nbr, files, i);
-            my_put_nbr(statbuff.st_size);
-            my_putchar(' ');
-            timer = localtime(&(statbuff.st_mtime));
-            print_month(timer);
-            put_space_day(timer, nbr, opt);
-            my_put_nbr(timer->tm_mday);
-            my_putchar(' ');
-            if (timer->tm_hour < 10)
-                my_putchar('0');
-            my_put_nbr(timer->tm_hour);
-            my_putchar(':');
-            if (timer->tm_min < 10)
-                my_putchar('0');
-            my_put_nbr(timer->tm_min);
-            my_putchar(' ');
-            my_putstr(files[i]);
-            my_putchar('\n');
-        }
-    }
-    exit(0);
+    if (opt->bool_d == 1)
+        display_d(opt);
+    if (opt->bool_l == 1 || opt->bool_n == 1)
+        display_l(opt);
+    if (opt->bool_a_maj == 1)
+        display_a_maj(opt->files, opt->nbr);
+    if (ac == 1 || (ac == 2 && opt->dir_bool == 1) || opt->bool_r == 1 ||
+        opt->bool_i == 1 || opt->bool_m == 1 || opt->bool_f == 1 ||
+        opt->bool_a == 1 || opt->bool_1 == 1)
+        display_ls(opt);
+    else
+        check_invalid_option(ac, av);
 }

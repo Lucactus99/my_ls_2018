@@ -5,7 +5,7 @@
 ** d
 */
 
-char my_strlowcase(char str)
+char lowcase(char str)
 {
 
     if (str > 64 && str < 91)

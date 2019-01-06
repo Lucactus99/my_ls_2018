@@ -31,11 +31,13 @@ void put_space_size(struct stat statbuff, int nbr, char **files, int a)
         my_putchar(' ');
 }
 
-void put_space_day_2(int length_file, struct tm *timer, int lengthMax, struct options *opt, int nbr)
+void put_space_day_2(int length_file, struct tm *timer,
+int lengthMax, struct options *opt)
 {
     int number = 0;
+    int total = 0;
 
-    for (int i = 0; i < nbr; i++) {
+    for (int i = 0; i < opt->nbr; i++) {
         length_file = 0;
         number = timer->tm_mday;
         for (int j = 0; number != 0; j++) {
@@ -44,7 +46,9 @@ void put_space_day_2(int length_file, struct tm *timer, int lengthMax, struct op
         }
     }
     number = timer->tm_mday;
-    for (int j = 0; j < lengthMax + length_file + opt->bool_a - opt->bool_f - length_file - 1; j++)
+    total = total + lengthMax + length_file + opt->bool_a;
+    total = total - opt->bool_f - length_file - 1;
+    for (int j = 0; j < total; j++)
         my_putchar(' ');
 }
 
@@ -54,18 +58,20 @@ void put_space_day(struct tm *timer, int nbr, struct options *opt)
     static int lengthMax = 0;
     int number = 0;
 
-    if (lengthMax == 0) {
-        for (int i = 0; i < nbr; i++) {
-            length_file = 0;
-            number = timer->tm_mday;
-            for (int j = 0; number != 0; j++) {
-                length_file += 1;
-                number /= 10;
-            }
-            if (length_file > lengthMax)
-                lengthMax = length_file;
-        }
-        lengthMax++;
+    if (lengthMax != 0) {
+        put_space_day_2(length_file, timer, lengthMax, opt);
+        return;
     }
-    put_space_day_2(length_file, timer, lengthMax, opt, nbr);
+    for (int i = 0; i < nbr; i++) {
+        length_file = 0;
+        number = timer->tm_mday;
+        for (int j = 0; number != 0; j++) {
+            length_file += 1;
+            number /= 10;
+        }
+        if (length_file > lengthMax)
+            lengthMax = length_file;
+    }
+    lengthMax++;
+    put_space_day_2(length_file, timer, lengthMax, opt);
 }

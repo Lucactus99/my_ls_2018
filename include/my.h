@@ -25,6 +25,8 @@
 
 struct options
 {
+    int nbr;
+    int len;
     int dir_bool;
     int bool_a;
     int bool_a_maj;
@@ -38,6 +40,7 @@ struct options
     int bool_r;
     long total_size;
     char *path;
+    char **files;
     int lines_display;
 };
 
@@ -45,21 +48,33 @@ void my_putchar(char);
 int my_putstr(char const *);
 int my_strlen(char const *);
 char *my_strcpy(char *dest, char const *src);
-char my_strlowcase(char str);
+char lowcase(char str);
 int my_strcmp(char const *s1, char const *s2);
 char *my_strcat(char *dest, char const *src);
 int my_getnbr(char *str);
 int my_put_nbr(int nb);
 void analyse_arg(int, char const * const *, struct options *);
-char **option_a(char **, int, int, struct options *);
+void option_a(struct options *);
 void put_space_size(struct stat, int, char **, int);
 void put_space_day(struct tm *, int, struct options *);
 void print_month(struct tm *);
-void display_ls(char **files, int nbr, struct options *opt);
-void display_l(char **files, int nbr, struct options *opt);
-void display_one(char **files, int nbr, struct options *opt);
-void display_a(char **files, int nbr, struct options *opt);
-void display_a_maj(char **files, int nbr);
-void display_d(struct options *opt);
+void display_ls(struct options *);
+void display_l(struct options *);
+void display_one(char **, int, struct options *);
+void display_a(char **, int, struct options *);
+void display_a_maj(char **, int);
+void display_d(struct options *);
+void display_l_permissions(struct stat);
+void display_l_links(struct stat);
+void display_l_owner_user(struct stat, struct options *);
+void display_l_size(struct stat, int, int, char **);
+void display_l_time(struct stat, int, struct options *);
+void display_l_total_size(int, struct options *, struct stat);
+void create_files(struct options *);
+void condition_display(int, struct options *, char const *const *);
+void check_invalid_option(int, char const *const *);
+void display_i(struct options *, struct stat);
+char **is_sorted(struct options *, int, int, int);
+char **reverse_str(char **, int, int);
 
 #endif //MY_H_

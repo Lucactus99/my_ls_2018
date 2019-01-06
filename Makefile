@@ -14,6 +14,9 @@ SRC     =   my_ls_main.c \
             my_ls_put_space.c \
             my_ls_print_month.c \
             my_ls_display.c \
+            my_ls_sorting.c \
+            my_ls_display_l.c \
+            my_ls_display_ls.c \
             src/my_strlen.c \
             src/my_strcpy.c \
             src/my_strlowcase.c \
