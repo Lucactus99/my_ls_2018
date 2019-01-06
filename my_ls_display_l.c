@@ -22,8 +22,9 @@ void display_l_permissions(struct stat statbuff)
     my_putchar(' ');
 }
 
-void display_l_links(struct stat statbuff)
+void display_l_links(struct stat statbuff, struct options *opt, int i)
 {
+    put_space_links(statbuff, opt->nbr, i, opt);
     my_put_nbr(statbuff.st_nlink);
     my_putchar(' ');
 }
@@ -40,13 +41,15 @@ void display_l_owner_user(struct stat statbuff, struct options *opt)
     my_putchar(' ');
     if (opt->bool_n == 1)
         my_put_nbr(statbuff.st_gid);
-    else
+    else if (opt->bool_o == 0) {
         my_putstr(gr->gr_name);
+        my_putchar(' ');
+    }
 }
 
-void display_l_size(struct stat statbuff, int nbr, int i, char **files)
+void display_l_size(struct stat statbuff, struct options *opt, int i)
 {
-    put_space_size(statbuff, nbr, files, i);
+    put_space_size(statbuff, opt->nbr, i, opt);
     my_put_nbr(statbuff.st_size);
     my_putchar(' ');
 }

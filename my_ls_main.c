@@ -59,10 +59,10 @@ int main(int ac, char const *const *av)
 
     opt->nbr = 0;
     opt->len = 0;
-    opt->path = malloc(sizeof(char) * 10);
+    opt->path = malloc(sizeof(char) * 1);
     analyse_arg(ac, av, opt);
     if (opt->dir_bool == 0)
-        opt->path = my_strcpy(opt->path, ".");
+        opt->path = my_strcpy(opt->path, "./");
     get_elements(opt);
     create_files(opt);
     option_a(opt);

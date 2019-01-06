@@ -29,7 +29,7 @@ void display_ls(struct options *opt)
     struct stat statbuff;
 
     for (int i = 0; i < opt->nbr; i++) {
-        stat(opt->files[i], &statbuff);
+        stat(opt->path, &statbuff);
         if (opt->files[i][0] != '.' || opt->bool_a == 1)
             display_ls_2(opt, i, statbuff);
     }
@@ -37,12 +37,13 @@ void display_ls(struct options *opt)
     exit(0);
 }
 
-void display_l_time(struct stat statbuff, int nbr, struct options *opt)
+void display_l_time(struct stat statbuff, struct options *opt, int i)
 {
-    struct tm *timer = localtime(&(statbuff.st_mtime));
+    struct tm *timer;
 
-    print_month(timer);
-    put_space_day(timer, nbr, opt);
+    print_month(statbuff);
+    put_space_day(statbuff, opt->nbr, i, opt);
+    timer = localtime(&(statbuff.st_mtime));
     my_put_nbr(timer->tm_mday);
     my_putchar(' ');
     if (timer->tm_hour < 10)
@@ -57,9 +58,13 @@ void display_l_time(struct stat statbuff, int nbr, struct options *opt)
 
 void display_l_total_size(int nbr, struct options *opt, struct stat statbuff)
 {
+    char *path_file = malloc(sizeof(char) * (my_strlen(opt->path) + opt->len + 1));
+
     for (int i = 0; i < nbr; i++) {
         if (opt->files[i][0] != '.' || opt->bool_a == 1) {
-            stat(opt->files[i], &statbuff);
+            path_file = my_strcpy(path_file, opt->path);
+            path_file = my_strcat(path_file, opt->files[i]);
+            stat(path_file, &statbuff);
             opt->total_size += statbuff.st_blocks / 2;
         }
     }

@@ -45,6 +45,8 @@ void check_options(char const *const *av, struct options *opt, int i)
 {
     if (av[i][1] == 'A')
         opt->bool_a_maj = 1;
+    if (av[i][1] == 'o')
+        opt->bool_o = 1;
     if (av[i][1] == 'd')
         opt->bool_d = 1;
     if (av[i][1] == 'l')
@@ -67,6 +69,7 @@ void analyse_arg(int ac, char const *const *av, struct options *opt)
             check_options(av, opt, i);
         } else {
             opt->dir_bool = 1;
+            opt->path = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
             opt->path = my_strcpy(opt->path, av[i]);
         }
     }

@@ -37,17 +37,22 @@ void display_a_maj(char **files, int nbr)
 void display_l(struct options *opt)
 {
     struct stat statbuff;
+    char *path_file = malloc(sizeof(char) *
+    (my_strlen(opt->path) + opt->len + 1));
 
     display_l_total_size(opt->nbr, opt, statbuff);
     for (int i = 0; i < opt->nbr; i++) {
         if (opt->files[i][0] != '.' || opt->bool_a == 1) {
-            stat(opt->files[i], &statbuff);
+            path_file = my_strcpy(path_file, opt->path);
+            path_file = my_strcat(path_file, opt->files[i]);
+            if (stat(path_file, &statbuff) < 0)
+                exit(84);
             display_i(opt, statbuff);
             display_l_permissions(statbuff);
-            display_l_links(statbuff);
+            display_l_links(statbuff, opt, i);
             display_l_owner_user(statbuff, opt);
-            display_l_size(statbuff, opt->nbr, i, opt->files);
-            display_l_time(statbuff, opt->nbr, opt);
+            display_l_size(statbuff, opt, i);
+            display_l_time(statbuff, opt, i);
             my_putstr(opt->files[i]);
             my_putchar('\n');
         }
@@ -59,7 +64,7 @@ void condition_display(int ac, struct options *opt, char const *const *av)
 {
     if (opt->bool_d == 1)
         display_d(opt);
-    if (opt->bool_l == 1 || opt->bool_n == 1)
+    if (opt->bool_l == 1 || opt->bool_n == 1 || opt->bool_o == 1)
         display_l(opt);
     if (opt->bool_a_maj == 1)
         display_a_maj(opt->files, opt->nbr);
