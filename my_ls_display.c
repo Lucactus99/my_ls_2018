@@ -117,9 +117,15 @@ void display_l(char **files, int nbr, struct options *opt)
             my_putchar(' ');
             my_put_nbr(statbuff.st_nlink);
             my_putchar(' ');
-            my_putstr(pwd->pw_name);
+            if (opt->bool_n == 1)
+                my_put_nbr(statbuff.st_uid);
+            else
+                my_putstr(pwd->pw_name);
             my_putchar(' ');
-            my_putstr(gr->gr_name);
+            if (opt->bool_n == 1)
+                my_put_nbr(statbuff.st_gid);
+            else
+                my_putstr(gr->gr_name);
             put_space_size(statbuff, nbr, files, i);
             my_put_nbr(statbuff.st_size);
             my_putchar(' ');

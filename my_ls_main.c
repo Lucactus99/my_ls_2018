@@ -7,11 +7,25 @@
 
 #include "my.h"
 
-void condition_display(int ac, struct options *opt, int nbr, char **files)
+void print_invalid_option(int ac, char const* const* av)
+{
+    for (int i = 0; i < ac; i++) {
+        for (int j = 0; av[i][j] != 0; j++) {
+            if (av[i][j] == '-') {
+                my_putstr("ls: invalid option -- '");
+                my_putchar(av[i][j + 1]);
+                my_putstr("'\nTry 'ls --help' for more information.\n");
+            }
+        }
+    }
+}
+
+void condition_display(int ac, struct options *opt, int nbr, char **files,
+                       char const* const* av)
 {
     if (opt->bool_d == 1)
         display_d(opt);
-    if (opt->bool_l == 1)
+    if (opt->bool_l == 1 || opt->bool_n == 1)
         display_l(files, nbr, opt);
     if (opt->bool_1 == 1)
         display_one(files, nbr, opt);
@@ -19,8 +33,11 @@ void condition_display(int ac, struct options *opt, int nbr, char **files)
         display_a(files, nbr, opt);
     if (opt->bool_a_maj == 1)
         display_a_maj(files, nbr);
-    if (ac == 1 || (ac == 2 && opt->dir_bool == 1) || opt->bool_r == 1 || opt->bool_i == 1 || opt->bool_m == 1)
+    if (ac == 1 || (ac == 2 && opt->dir_bool == 1) || opt->bool_r == 1 ||
+        opt->bool_i == 1 || opt->bool_m == 1)
         display_ls(files, nbr, opt);
+    else
+        print_invalid_option(ac, av);
 }
 
 int main(int ac, char const *const *av)
@@ -70,6 +87,6 @@ int main(int ac, char const *const *av)
     }
     closedir(rep);
     files = option_a(files, nbr, len, opt);
-    condition_display(ac, opt, nbr, files);
+    condition_display(ac, opt, nbr, files, av);
     return (0);
 }

@@ -34,6 +34,7 @@ struct options
     int bool_1;
     int bool_l;
     int bool_m;
+    int bool_n;
     int bool_r;
     long total_size;
     char *path;

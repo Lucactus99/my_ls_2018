@@ -57,6 +57,8 @@ void check_options(char const *const *av, struct options *opt, int i)
         opt->bool_i = 1;
     if (av[i][1] == 'm')
         opt->bool_m = 1;
+    if (av[i][1] == 'n')
+        opt->bool_n = 1;
     if (av[i][1] == 'r')
         opt->bool_r = 1;
     if (av[i][1] == '1')
