@@ -23,10 +23,8 @@ void print_month_2(struct tm *timer)
         my_putstr("déc. ");
 }
 
-void print_month(struct stat statbuff)
+void print_month(struct tm *timer)
 {
-    struct tm *timer = localtime(&(statbuff.st_mtime));
-
     if (timer->tm_mon == 0)
         my_putstr("janv.");
     if (timer->tm_mon == 1)

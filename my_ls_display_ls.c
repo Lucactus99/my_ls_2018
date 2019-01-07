@@ -7,10 +7,25 @@
 
 #include "my.h"
 
+struct tm *my_localtime(long *timestamp)
+{
+    struct tm *timer = malloc(sizeof(struct tm));
+
+    *timestamp = (*timestamp / 60);
+    timer->tm_min = *timestamp % 60;
+    *timestamp = (*timestamp / 60);
+    timer->tm_hour = *timestamp % 24 + 1;
+    if (timer->tm_hour == 24)
+        timer->tm_hour = 00;
+    return (timer);
+}
+
 void display_ls_2(struct options *opt, int i, struct stat statbuff)
 {
     display_i(opt, statbuff);
     my_putstr(opt->files[i]);
+    if (S_ISDIR(statbuff.st_mode) == 1 && opt->bool_p == 1)
+        my_putchar('/');
     if (i + 1 < opt->nbr) {
         if (opt->bool_m == 1) {
             my_putchar(44);
@@ -27,9 +42,13 @@ void display_ls_2(struct options *opt, int i, struct stat statbuff)
 void display_ls(struct options *opt)
 {
     struct stat statbuff;
+    char *path_file = malloc(sizeof(char) *
+    (my_strlen(opt->path) + opt->len + 1));
 
     for (int i = 0; i < opt->nbr; i++) {
-        stat(opt->path, &statbuff);
+        path_file = my_strcpy(path_file, opt->path);
+        path_file = my_strcat(path_file, opt->files[i]);
+        stat(path_file, &statbuff);
         if (opt->files[i][0] != '.' || opt->bool_a == 1)
             display_ls_2(opt, i, statbuff);
     }
@@ -39,11 +58,10 @@ void display_ls(struct options *opt)
 
 void display_l_time(struct stat statbuff, struct options *opt, int i)
 {
-    struct tm *timer;
+    struct tm *timer = my_localtime(&(statbuff.st_mtime));
 
-    print_month(statbuff);
+    print_month(timer);
     put_space_day(statbuff, opt->nbr, i, opt);
-    timer = localtime(&(statbuff.st_mtime));
     my_put_nbr(timer->tm_mday);
     my_putchar(' ');
     if (timer->tm_hour < 10)
@@ -58,7 +76,8 @@ void display_l_time(struct stat statbuff, struct options *opt, int i)
 
 void display_l_total_size(int nbr, struct options *opt, struct stat statbuff)
 {
-    char *path_file = malloc(sizeof(char) * (my_strlen(opt->path) + opt->len + 1));
+    char *path_file = malloc(sizeof(char) *
+    (my_strlen(opt->path) + opt->len + 1));
 
     for (int i = 0; i < nbr; i++) {
         if (opt->files[i][0] != '.' || opt->bool_a == 1) {

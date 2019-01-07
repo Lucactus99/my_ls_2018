@@ -15,6 +15,20 @@ void option_a(struct options *opt)
     }
     if (opt->bool_r == 1 && opt->bool_f == 0)
         opt->files = reverse_str(opt->files, opt->len, opt->nbr);
+    if (opt->bool_tt == 1)
+        opt->files = sort_by_time(opt);
+}
+
+void check_options_3(char const *const *av, struct options *opt, int i)
+{
+    if (my_strcmp(av[i], "-la") == 0) {
+        opt->bool_l = 1;
+        opt->bool_a = 1;
+    }
+    if (my_strcmp(av[i], "-1a") == 0) {
+        opt->bool_1 = 1;
+        opt->bool_a = 1;
+    }
 }
 
 void check_options_2(char const *const *av, struct options *opt, int i)
@@ -37,28 +51,25 @@ void check_options_2(char const *const *av, struct options *opt, int i)
         opt->bool_m = 0;
         opt->bool_1 = 1;
     }
-    if (av[i][1] == 'a')
-        opt->bool_a = 1;
+    check_options_3(av, opt, i);
 }
 
 void check_options(char const *const *av, struct options *opt, int i)
 {
+    if (av[i][1] == 'a')
+        opt->bool_a = 1;
     if (av[i][1] == 'A')
         opt->bool_a_maj = 1;
     if (av[i][1] == 'o')
         opt->bool_o = 1;
+    if (av[i][1] == 't')
+        opt->bool_tt = 1;
+    if (av[i][1] == 'p')
+        opt->bool_p = 1;
     if (av[i][1] == 'd')
         opt->bool_d = 1;
     if (av[i][1] == 'l')
         opt->bool_l = 1;
-    if (my_strcmp(av[i], "-la") == 0) {
-        opt->bool_l = 1;
-        opt->bool_a = 1;
-    }
-    if (my_strcmp(av[i], "-1a") == 0) {
-        opt->bool_1 = 1;
-        opt->bool_a = 1;
-    }
     check_options_2(av, opt, i);
 }
 

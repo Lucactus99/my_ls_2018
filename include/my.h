@@ -23,6 +23,22 @@
 #include <time.h>
 #include <grp.h>
 
+struct dates
+{
+    int year1;
+    int month1;
+    int day1;
+    int hour1;
+    int min1;
+    int sec1;
+    int year2;
+    int month2;
+    int day2;
+    int hour2;
+    int min2;
+    int sec2;
+};
+
 struct options
 {
     int nbr;
@@ -38,7 +54,9 @@ struct options
     int bool_m;
     int bool_n;
     int bool_o;
+    int bool_p;
     int bool_r;
+    int bool_tt;
     long total_size;
     char *path;
     char **files;
@@ -59,13 +77,14 @@ void option_a(struct options *);
 void put_space_size(struct stat, int, int, struct options *);
 void put_space_day(struct stat, int, int, struct options *);
 void put_space_links(struct stat, int, int, struct options *);
-void print_month(struct stat);
+void print_month(struct tm *);
 void display_ls(struct options *);
 void display_l(struct options *);
 void display_one(char **, int, struct options *);
 void display_a(char **, int, struct options *);
 void display_a_maj(char **, int);
 void display_d(struct options *);
+void display_s(struct options *);
 void display_l_permissions(struct stat);
 void display_l_links(struct stat, struct options *, int);
 void display_l_owner_user(struct stat, struct options *);
@@ -76,6 +95,9 @@ void create_files(struct options *);
 void condition_display(int, struct options *, char const *const *);
 void check_invalid_option(int, char const *const *);
 void display_i(struct options *, struct stat);
+void find_path(struct stat *statbuff, struct options *opt, int i);
+char **sort_by_time(struct options *opt);
+char **sort_year(struct stat statbuff, struct tm *timer, struct options *opt);
 char **is_sorted(struct options *, int, int, int);
 char **reverse_str(char **, int, int);
 
