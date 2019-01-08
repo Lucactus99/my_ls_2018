@@ -59,6 +59,7 @@ struct options
     int bool_tt;
     long total_size;
     char *path;
+    char *path_av;
     char **files;
     int lines_display;
 };
@@ -98,5 +99,7 @@ char **is_sorted(struct options *, int, int, int);
 char **reverse_str(char **, int, int);
 void print_file(char *file);
 void swap_str(char **str1, char **str2);
+void check_options(char const *const *av, struct options *opt, int i, int j);
+void check_options_2(char const *const *av, struct options *opt, int i, int j);
 
 #endif //MY_H_

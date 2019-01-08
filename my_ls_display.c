@@ -17,10 +17,21 @@ void display_i(struct options *opt, struct stat statbuff)
 
 void display_d(struct options *opt)
 {
+    struct stat statbuff;
+
+    find_path(&statbuff, opt, -1);
+    if (opt->bool_l == 1) {
+        display_i(opt, statbuff);
+        display_l_permissions(statbuff);
+        display_l_links(statbuff, opt, -1);
+        display_l_owner_user(statbuff, opt);
+        display_l_size(statbuff, opt, -1);
+        display_l_time(statbuff);
+    }
     if (my_strcmp(opt->path, "./") == 0)
         my_putchar('.');
     else
-        my_putstr(opt->path);
+        my_putstr(opt->path_av);
     my_putchar('\n');
     exit(0);
 }

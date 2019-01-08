@@ -25,10 +25,15 @@ void find_path(struct stat *statbuff, struct options *opt, int i)
     char *path_file =
     malloc(sizeof(char) * (my_strlen(opt->path) + opt->len + 1));
 
-    path_file = my_strcpy(path_file, opt->path);
-    path_file = my_strcat(path_file, opt->files[i]);
-    if (stat(path_file, statbuff) < 0)
-        exit(84);
+    if (i > -1) {
+        path_file = my_strcpy(path_file, opt->path);
+        path_file = my_strcat(path_file, opt->files[i]);
+        if (stat(path_file, statbuff) < 0)
+            exit(84);
+    } else {
+        if (stat(opt->path, statbuff) < 0)
+            exit(84);
+    }
 }
 
 void condition_display(int ac, struct options *opt, char const *const *av)
