@@ -82,6 +82,7 @@ void analyse_arg(int ac, char const *const *av, struct options *opt)
             opt->dir_bool = 1;
             opt->path = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
             opt->path = my_strcpy(opt->path, av[i]);
+            opt->path = my_strcat(opt->path, "/");
         }
     }
 }
