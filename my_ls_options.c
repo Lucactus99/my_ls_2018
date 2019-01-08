@@ -19,26 +19,6 @@ void option_a(struct options *opt)
         opt->files = sort_by_time(opt);
 }
 
-void check_options_3(char const *const *av, struct options *opt, int i)
-{
-    if (my_strcmp(av[i], "-la") == 0) {
-        opt->bool_l = 1;
-        opt->bool_a = 1;
-    }
-    if (my_strcmp(av[i], "-al") == 0) {
-        opt->bool_l = 1;
-        opt->bool_a = 1;
-    }
-    if (my_strcmp(av[i], "-lt") == 0) {
-        opt->bool_l = 1;
-        opt->bool_tt = 1;
-    }
-    if (my_strcmp(av[i], "-1a") == 0) {
-        opt->bool_1 = 1;
-        opt->bool_a = 1;
-    }
-}
-
 void check_options_2(char const *const *av, struct options *opt, int i, int j)
 {
     if (av[i][j] == 'f') {
@@ -82,19 +62,28 @@ void check_options(char const *const *av, struct options *opt, int i, int j)
     check_options_2(av, opt, i, j);
 }
 
+void analyse_path(int ac, char const *const *av, struct options *opt)
+{
+    int i = 1;
+
+    while (av[i][0] == '-' && i < ac - 1)
+        i++;
+    if (av[i][0] != '-') {
+        opt->dir_bool = 1;
+        opt->path = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
+        opt->path = my_strcpy(opt->path, av[i]);
+        opt->path_av = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
+        opt->path_av = my_strcpy(opt->path_av, opt->path);
+        if (opt->path[my_strlen(opt->path) - 1] != '/')
+            opt->path = my_strcat(opt->path, "/");
+    }
+}
+
 void analyse_arg(int ac, char const *const *av, struct options *opt)
 {
     for (int i = 1; i < ac; i++) {
-        if (av[i][0] != '.' && av[i][0] == '-') {
+        if (av[i][0] == '-')
             check_options(av, opt, i, 1);
-        } else {
-            opt->dir_bool = 1;
-            opt->path = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
-            opt->path = my_strcpy(opt->path, av[i]);
-            opt->path_av = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
-            opt->path_av = my_strcpy(opt->path_av, opt->path);
-            if (opt->path[my_strlen(opt->path) - 1] != '/')
-                opt->path = my_strcat(opt->path, "/");
-        }
     }
+    analyse_path(ac, av, opt);
 }
