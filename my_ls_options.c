@@ -25,6 +25,10 @@ void check_options_3(char const *const *av, struct options *opt, int i)
         opt->bool_l = 1;
         opt->bool_a = 1;
     }
+    if (my_strcmp(av[i], "-lt") == 0) {
+        opt->bool_l = 1;
+        opt->bool_tt = 1;
+    }
     if (my_strcmp(av[i], "-1a") == 0) {
         opt->bool_1 = 1;
         opt->bool_a = 1;

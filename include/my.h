@@ -89,7 +89,7 @@ void display_l_permissions(struct stat);
 void display_l_links(struct stat, struct options *, int);
 void display_l_owner_user(struct stat, struct options *);
 void display_l_size(struct stat, struct options *, int);
-void display_l_time(struct stat, struct options *, int);
+void display_l_time(struct stat);
 void display_l_total_size(int, struct options *, struct stat);
 void create_files(struct options *);
 void condition_display(int, struct options *, char const *const *);
@@ -101,5 +101,7 @@ char **sort_year(struct stat statbuff, struct tm *timer, struct options *opt);
 char **is_sorted(struct options *, int, int, int);
 char **reverse_str(char **, int, int);
 struct tm *my_localtime(long *timestamp);
+void print_file(char *file);
+void swap_str(char **str1, char **str2);
 
 #endif //MY_H_

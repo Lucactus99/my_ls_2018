@@ -37,6 +37,23 @@ void display_a_maj(char **files, int nbr)
     exit(0);
 }
 
+void print_file(char *file)
+{
+    int ok = 0;
+
+    for (int i = 0; file[i] != 0; i++) {
+        if (file[i] == ' ') {
+            ok = 1;
+            break;
+        }
+    }
+    if (ok == 1)
+        my_putchar(39);
+    my_putstr(file);
+    if (ok == 1)
+        my_putchar(39);
+}
+
 void display_l(struct options *opt)
 {
     struct stat statbuff;
@@ -50,28 +67,10 @@ void display_l(struct options *opt)
             display_l_links(statbuff, opt, i);
             display_l_owner_user(statbuff, opt);
             display_l_size(statbuff, opt, i);
-            display_l_time(statbuff, opt, i);
-            my_putstr(opt->files[i]);
+            display_l_time(statbuff);
+            print_file(opt->files[i]);
             my_putchar('\n');
         }
     }
     exit(0);
-}
-
-void condition_display(int ac, struct options *opt, char const *const *av)
-{
-    if (opt->bool_d == 1)
-        display_d(opt);
-    if ((opt->bool_l == 1 && opt->bool_tt == 1) || opt->bool_l == 1 ||
-    opt->bool_n == 1 || opt->bool_o == 1)
-        display_l(opt);
-    if (opt->bool_a_maj == 1)
-        display_a_maj(opt->files, opt->nbr);
-    if (ac == 1 || (ac == 2 && opt->dir_bool == 1) || opt->bool_r == 1 ||
-        opt->bool_i == 1 || opt->bool_m == 1 || opt->bool_f == 1 ||
-        opt->bool_a == 1 || opt->bool_1 == 1 || opt->bool_p == 1 ||
-        opt->bool_tt == 1)
-        display_ls(opt);
-    else
-        check_invalid_option(ac, av);
 }

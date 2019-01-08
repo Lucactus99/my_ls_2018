@@ -7,28 +7,10 @@
 
 #include "my.h"
 
-void swap_str(char **str1, char **str2)
+void swap_condition(struct options *opt, int nbr1, int nbr2, int j)
 {
-    char *tmp;
-
-    if (my_strlen(*str1) > my_strlen(*str2))
-        tmp = malloc(sizeof(char) * (my_strlen(*str1) + 1));
-    else
-        tmp = malloc(sizeof(char) * (my_strlen(*str2) + 1));
-    tmp = *str1;
-    *str1 = *str2;
-    *str2 = tmp;
-}
-
-void find_path(struct stat *statbuff, struct options *opt, int i)
-{
-    char *path_file =
-    malloc(sizeof(char) * (my_strlen(opt->path) + opt->len + 1));
-
-    path_file = my_strcpy(path_file, opt->path);
-    path_file = my_strcat(path_file, opt->files[i]);
-    if (stat(path_file, statbuff) < 0)
-        exit(84);
+    if (nbr1 < nbr2)
+        swap_str(&opt->files[j], &opt->files[j + 1]);
 }
 
 char **sort_by_time(struct options *opt)
@@ -43,8 +25,7 @@ char **sort_by_time(struct options *opt)
             nbr1 = statbuff.st_mtime;
             find_path(&statbuff, opt, j + 1);
             nbr2 = statbuff.st_mtime;
-            if (nbr1 < nbr2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
+            swap_condition(opt, nbr1, nbr2, j);
         }
     }
     return (opt->files);

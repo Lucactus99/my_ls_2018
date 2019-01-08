@@ -53,3 +53,21 @@ void display_l_size(struct stat statbuff, struct options *opt, int i)
     my_put_nbr(statbuff.st_size);
     my_putchar(' ');
 }
+
+void display_l_total_size(int nbr, struct options *opt, struct stat statbuff)
+{
+    char *path_file = malloc(sizeof(char) *
+    (my_strlen(opt->path) + opt->len + 1));
+
+    for (int i = 0; i < nbr; i++) {
+        if (opt->files[i][0] != '.' || opt->bool_a == 1) {
+            path_file = my_strcpy(path_file, opt->path);
+            path_file = my_strcat(path_file, opt->files[i]);
+            stat(path_file, &statbuff);
+            opt->total_size += statbuff.st_blocks / 2;
+        }
+    }
+    my_putstr("total ");
+    my_put_nbr(opt->total_size);
+    my_putchar('\n');
+}
