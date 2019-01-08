@@ -31,164 +31,22 @@ void find_path(struct stat *statbuff, struct options *opt, int i)
         exit(84);
 }
 
-void set_time_2(struct tm *timer, struct dates *dt, int nb)
-{
-    if (nb > 5)
-        dt->sec2 = timer->tm_sec;
-    if (nb > 4)
-        dt->min2 = timer->tm_min;
-    if (nb > 3)
-        dt->hour2 = timer->tm_hour;
-    if (nb > 2)
-        dt->day2 = timer->tm_mday;
-    if (nb > 1)
-        dt->month2 = timer->tm_mon;
-    if (nb > 0)
-        dt->year2 = timer->tm_year;
-}
-
-void set_time_1(struct tm *timer, struct dates *dt, int nb)
-{
-    if (nb > 5)
-        dt->sec1 = timer->tm_sec;
-    if (nb > 4)
-        dt->min1 = timer->tm_min;
-    if (nb > 3)
-        dt->hour1 = timer->tm_hour;
-    if (nb > 2)
-        dt->day1 = timer->tm_mday;
-    if (nb > 1)
-        dt->month1 = timer->tm_mon;
-    if (nb > 0)
-        dt->year1 = timer->tm_year;
-}
-
-char **sort_sec(struct stat statbuff, struct tm *timer, struct options *opt)
-{
-    struct dates *dt = malloc(sizeof(struct dates));
-
-    for (int i = 0; i < opt->nbr - 1; i++) {
-        for (int j = 0; j < opt->nbr - i - 1; j++) {
-            find_path(&statbuff, opt, j);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_1(timer, dt, 6);
-            find_path(&statbuff, opt, j + 1);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_2(timer, dt, 6);
-            if (dt->sec1 < dt->sec2 && dt->min1 == dt->min2 &&
-            dt->hour1 == dt->hour2 && dt->day1 == dt->day2 &&
-            dt->month1 == dt->month2 && dt->year1 == dt->year2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
-        }
-    }
-    return (opt->files);
-}
-
-char **sort_min(struct stat statbuff, struct tm *timer, struct options *opt)
-{
-    struct dates *dt = malloc(sizeof(struct dates));
-
-    for (int i = 0; i < opt->nbr - 1; i++) {
-        for (int j = 0; j < opt->nbr - i - 1; j++) {
-            find_path(&statbuff, opt, j);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_1(timer, dt, 5);
-            find_path(&statbuff, opt, j + 1);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_2(timer, dt, 5);
-            if (dt->min1 < dt->min2 && dt->hour1 == dt->hour2 &&
-            dt->day1 == dt->day2 && dt->month1 == dt->month2 &&
-            dt->year1 == dt->year2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
-        }
-    }
-    return (sort_sec(statbuff, timer, opt));
-}
-
-char **sort_hour(struct stat statbuff, struct tm *timer, struct options *opt)
-{
-    struct dates *dt = malloc(sizeof(struct dates));
-
-    for (int i = 0; i < opt->nbr - 1; i++) {
-        for (int j = 0; j < opt->nbr - i - 1; j++) {
-            find_path(&statbuff, opt, j);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_1(timer, dt, 4);
-            find_path(&statbuff, opt, j + 1);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_2(timer, dt, 4);
-            if (dt->hour1 < dt->hour2 && dt->day1 == dt->day2
-            && dt->month1 == dt->month2 && dt->year1 == dt->year2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
-        }
-    }
-    return (sort_min(statbuff, timer, opt));
-}
-
-char **sort_day(struct stat statbuff, struct tm *timer, struct options *opt)
-{
-    struct dates *dt = malloc(sizeof(struct dates));
-
-    for (int i = 0; i < opt->nbr - 1; i++) {
-        for (int j = 0; j < opt->nbr - i - 1; j++) {
-            find_path(&statbuff, opt, j);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_1(timer, dt, 3);
-            find_path(&statbuff, opt, j + 1);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_2(timer, dt, 3);
-            if (dt->day1 < dt->day2 && dt->month1 == dt->month2
-            && dt->year1 == dt->year2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
-        }
-    }
-    return (sort_hour(statbuff, timer, opt));
-}
-
-char **sort_month(struct stat statbuff, struct tm *timer, struct options *opt)
-{
-    struct dates *dt = malloc(sizeof(struct dates));
-
-    for (int i = 0; i < opt->nbr - 1; i++) {
-        for (int j = 0; j < opt->nbr - i - 1; j++) {
-            find_path(&statbuff, opt, j);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_1(timer, dt, 2);
-            find_path(&statbuff, opt, j + 1);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_2(timer, dt, 2);
-            if (dt->month1 < dt->month2 && dt->year1 == dt->year2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
-        }
-    }
-    return (sort_day(statbuff, timer, opt));
-}
-
-char **sort_year(struct stat statbuff, struct tm *timer, struct options *opt)
-{
-    struct dates *dt = malloc(sizeof(struct dates));
-
-    for (int i = 0; i < opt->nbr - 1; i++) {
-        for (int j = 0; j < opt->nbr - i - 1; j++) {
-            find_path(&statbuff, opt, j);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_1(timer, dt, 1);
-            find_path(&statbuff, opt, j + 1);
-            timer = my_localtime(&(statbuff.st_mtime));
-            set_time_2(timer, dt, 1);
-            if (dt->year1 < dt->year2)
-                swap_str(&opt->files[j], &opt->files[j + 1]);
-        }
-    }
-    return (sort_month(statbuff, timer, opt));
-}
-
 char **sort_by_time(struct options *opt)
 {
     struct stat statbuff;
-    struct tm *timer = my_localtime(&(statbuff.st_mtime));
+    int nbr1 = 0;
+    int nbr2 = 0;
 
-    opt->files = sort_year(statbuff, timer, opt);
+    for (int i = 0; i < opt->nbr - 1; i++) {
+        for (int j = 0; j < opt->nbr - i - 1; j++) {
+            find_path(&statbuff, opt, j);
+            nbr1 = statbuff.st_mtime;
+            find_path(&statbuff, opt, j + 1);
+            nbr2 = statbuff.st_mtime;
+            if (nbr1 < nbr2)
+                swap_str(&opt->files[j], &opt->files[j + 1]);
+        }
+    }
     return (opt->files);
 }
 
