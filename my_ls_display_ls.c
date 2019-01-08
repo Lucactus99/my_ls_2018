@@ -10,13 +10,47 @@
 struct tm *my_localtime(long *timestamp)
 {
     struct tm *timer = malloc(sizeof(struct tm));
+    long stamp = *timestamp;
+    int test = 0;
 
-    *timestamp = (*timestamp / 60);
-    timer->tm_min = *timestamp % 60;
-    *timestamp = (*timestamp / 60);
-    timer->tm_hour = *timestamp % 24 + 1;
+    while (*timestamp > 31556926) {
+        test++;
+        *timestamp -= 31556926;
+    }
+    timer->tm_year = test + 1970;
+    test = 0;
+    while (*timestamp > 2629743) {
+        test++;
+        *timestamp -= 2629743;
+    }
+    timer->tm_mon = test;
+    test = 0;
+    while (*timestamp > 604800) {
+        test++;
+        *timestamp -= 604800;
+    }
+    timer->tm_wday = test;
+    test = 0;
+    while (*timestamp > 86400) {
+        test++;
+        *timestamp -= 86400;
+    }
+    if (timer->tm_wday < test)
+        test++;
+    timer->tm_mday = test + timer->tm_wday * 6 + timer->tm_wday;
+    test = 0;
+    while (*timestamp > 3600) {
+        test++;
+        *timestamp -= 3600;
+    }
+    stamp = (stamp / 60);
+    timer->tm_min = stamp % 60;
+    stamp = (stamp / 60);
+    timer->tm_hour = stamp % 24 + 1;
     if (timer->tm_hour == 24)
         timer->tm_hour = 00;
+    if (timer->tm_hour == 0 || timer->tm_hour == 1)
+        timer->tm_mday++;
     return (timer);
 }
 

@@ -40,7 +40,7 @@ void put_space_day(struct stat statbuff, int nbr, int a, struct options *opt)
     for (int i = 0; i < nbr; i++) {
         length_files[i] = 0;
         find_path(&statbuff, opt, i);
-        timer = localtime(&(statbuff.st_mtime));
+        timer = my_localtime(&(statbuff.st_mtime));
         number = timer->tm_mday;
         for (int j = 0; number != 0; j++) {
             length_files[i] += 1;

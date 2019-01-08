@@ -100,5 +100,6 @@ char **sort_by_time(struct options *opt);
 char **sort_year(struct stat statbuff, struct tm *timer, struct options *opt);
 char **is_sorted(struct options *, int, int, int);
 char **reverse_str(char **, int, int);
+struct tm *my_localtime(long *timestamp);
 
 #endif //MY_H_

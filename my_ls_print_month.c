@@ -20,7 +20,7 @@ void print_month_2(struct tm *timer)
     if (timer->tm_mon == 10)
         my_putstr("nov. ");
     if (timer->tm_mon == 11)
-        my_putstr("déc. ");
+        my_putstr("dec. ");
 }
 
 void print_month(struct tm *timer)
