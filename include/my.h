@@ -67,12 +67,12 @@ struct options
 void my_putchar(char);
 int my_putstr(char const *);
 int my_strlen(char const *);
-char *my_strcpy(char *dest, char const *src);
-char lowcase(char str);
-int my_strcmp(char const *s1, char const *s2);
-char *my_strcat(char *dest, char const *src);
-int my_getnbr(char *str);
-int my_put_nbr(int nb);
+char *my_strcpy(char *, char const *);
+char lowcase(char);
+int my_strcmp(char const *, char const *);
+char *my_strcat(char *, char const *);
+int my_getnbr(char *);
+int my_put_nbr(int);
 void analyse_arg(int, char const * const *, struct options *);
 void option_a(struct options *);
 void put_space_size(struct stat, int, int, struct options *);
@@ -93,13 +93,13 @@ void create_files(struct options *);
 void condition_display(int, struct options *, char const *const *);
 void check_invalid_option(int, char const *const *);
 void display_i(struct options *, struct stat);
-void find_path(struct stat *statbuff, struct options *opt, int i);
-char **sort_by_time(struct options *opt);
+void find_path(struct stat *, struct options *, int);
+char **sort_by_time(struct options *);
 char **is_sorted(struct options *, int, int, int);
 char **reverse_str(char **, int, int);
-void print_file(char *file);
-void swap_str(char **str1, char **str2);
-void check_options(char const *const *av, struct options *opt, int i, int j);
-void check_options_2(char const *const *av, struct options *opt, int i, int j);
+void print_file(char *);
+void swap_str(char **, char **);
+void check_options(char const *const *, struct options *, int, int);
+void check_options_2(char const *const *, struct options *, int, int);
 
 #endif //MY_H_
