@@ -9,7 +9,12 @@
 
 void display_l_permissions(struct stat statbuff)
 {
-    my_putstr((S_ISDIR(statbuff.st_mode)) ? "d" : "-");
+    if (S_ISCHR(statbuff.st_mode))
+        my_putchar('c');
+    else if (S_ISDIR(statbuff.st_mode))
+        my_putchar('d');
+    else
+        my_putchar('-');
     my_putstr((statbuff.st_mode & S_IRUSR) ? "r" : "-");
     my_putstr((statbuff.st_mode & S_IWUSR) ? "w" : "-");
     my_putstr((statbuff.st_mode & S_IXUSR) ? "x" : "-");
