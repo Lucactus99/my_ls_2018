@@ -66,6 +66,8 @@ void analyse_path(int ac, char const *const *av, struct options *opt)
 {
     int i = 1;
 
+    if (ac < 2)
+        return ;
     while (av[i][0] == '-' && i < ac - 1)
         i++;
     if (av[i][0] != '-') {
