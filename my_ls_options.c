@@ -45,6 +45,8 @@ void check_options_2(char const *const *av, struct options *opt, int i, int j)
 
 void check_options(char const *const *av, struct options *opt, int i, int j)
 {
+    if (av[i][j] == 'R')
+        opt->bool_R = 1;
     if (av[i][j] == 'a')
         opt->bool_a = 1;
     if (av[i][j] == 'A')

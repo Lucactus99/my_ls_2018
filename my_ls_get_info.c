@@ -38,6 +38,8 @@ void find_path(struct stat *statbuff, struct options *opt, int i)
 
 void condition_display(int ac, struct options *opt, char const *const *av)
 {
+    if (opt->bool_R == 1)
+        display_r(opt, -1);
     if (opt->bool_d == 1)
         display_d(opt);
     if ((opt->bool_l == 1 && opt->bool_tt == 1) || opt->bool_l == 1 ||
