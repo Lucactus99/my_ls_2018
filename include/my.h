@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <grp.h>
+#include <sys/sysmacros.h>
 
 struct dates
 {

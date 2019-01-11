@@ -14,7 +14,7 @@ void display_l_permissions(struct stat statbuff)
     else if (S_ISDIR(statbuff.st_mode))
         my_putchar('d');
     else
-        my_putchar('-');
+        my_putstr(S_ISBLK(statbuff.st_mode) ? "b" : "-");
     my_putstr((statbuff.st_mode & S_IRUSR) ? "r" : "-");
     my_putstr((statbuff.st_mode & S_IWUSR) ? "w" : "-");
     my_putstr((statbuff.st_mode & S_IXUSR) ? "x" : "-");
@@ -23,7 +23,12 @@ void display_l_permissions(struct stat statbuff)
     my_putstr((statbuff.st_mode & S_IXGRP) ? "x" : "-");
     my_putstr((statbuff.st_mode & S_IROTH) ? "r" : "-");
     my_putstr((statbuff.st_mode & S_IWOTH) ? "w" : "-");
-    my_putstr((statbuff.st_mode & S_IXOTH) ? "x" : "-");
+    if (statbuff.st_mode & __S_ISVTX)
+        my_putchar('t');
+    else if (statbuff.st_mode & S_IXOTH)
+        my_putchar('x');
+    else
+        my_putchar('-');
     my_putchar(' ');
 }
 
@@ -54,6 +59,27 @@ void display_l_owner_user(struct stat statbuff, struct options *opt)
 
 void display_l_size(struct stat statbuff, struct options *opt, int i)
 {
+    if (S_ISCHR(statbuff.st_mode)) {
+        put_space_size(statbuff, opt->nbr, i, opt);
+        my_put_nbr(major(statbuff.st_rdev));
+        my_putchar(',');
+        put_space_size(statbuff, opt->nbr, i, opt);
+        my_put_nbr(minor(statbuff.st_rdev));
+        my_putchar(' ');
+        return;
+    }
+    if (S_ISDIR(statbuff.st_mode)) {
+        put_space_size(statbuff, opt->nbr, i, opt);
+        my_put_nbr(statbuff.st_size);
+        my_putchar(' ');
+        return;
+    }
+    if (S_ISBLK(statbuff.st_mode)) {
+        put_space_size(statbuff, opt->nbr, i, opt);
+        my_put_nbr(statbuff.st_size);
+        my_putchar(' ');
+        return;
+    }
     put_space_size(statbuff, opt->nbr, i, opt);
     my_put_nbr(statbuff.st_size);
     my_putchar(' ');

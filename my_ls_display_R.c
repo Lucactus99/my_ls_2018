@@ -48,12 +48,10 @@ void display_list_r_2(struct options *opt, int i, struct stat statbuff, char *pa
     tmp = my_strcpy(tmp, path_file);
     tmp = my_strcat(tmp, "/");
     tmp = my_strcat(tmp, opt->files[i]);
-    //printf("=>%s\n", tmp);
     if (stat(tmp, &underbuff) >= 0)
         is_dir = S_ISDIR(underbuff.st_mode);
     display_i(opt, statbuff);
     print_file(opt->files[i]);
-    //printf("%d\n", S_ISDIR(underbuff.st_mode));
     if (is_dir == 1 && count_slash(tmp) >= 3) {
         s = get_actual_path(tmp);
         my_putchar('\n');
@@ -63,9 +61,6 @@ void display_list_r_2(struct options *opt, int i, struct stat statbuff, char *pa
         my_putchar('\n');
         get_elements(opt, i, s);
         create_files(opt, i, s);
-        //display_list_r(opt, tmp);
-        // get_elements(opt, -1, NULL);
-        // create_files(opt, -1, NULL);
     }
     if (i + 1 < opt->nbr) {
         if (opt->bool_m == 1) {
