@@ -58,35 +58,19 @@ char **reverse_str(char **files, int len, int nbr)
     return (files);
 }
 
-void create_files(struct options *opt, int i, char *str)
+void create_files(struct options *opt)
 {
     DIR *rep;
     struct dirent *lecture;
-    char *tmp;
 
-    if (i == -1)
-        rep = opendir(opt->path);
-    else {
-        tmp = malloc(sizeof(char) * 100);
-        tmp = my_strcpy(tmp, opt->path);
-        if (str != NULL)
-            tmp = my_strcat(tmp, str);
-        tmp = my_strcat(tmp, opt->files[i]);
-        rep = opendir(tmp);
-    }
     opt->files = malloc(sizeof(char *) * opt->nbr);
     for (int i = 0; i < opt->nbr; i++)
         opt->files[i] = malloc(sizeof(char) * (opt->len + 1));
-    if (i == -1)
-        rep = opendir(opt->path);
-    else
-        rep = opendir(tmp);
+    rep = opendir(opt->path);
     lecture = readdir(rep);
     for (int i = 0; i < opt->nbr; i++) {
         opt->files[i] = my_strcpy(opt->files[i], lecture->d_name);
         lecture = readdir(rep);
     }
-    if (i > -1)
-        free(tmp);
     closedir(rep);
 }

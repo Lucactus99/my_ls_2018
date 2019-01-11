@@ -38,8 +38,6 @@ void find_path(struct stat *statbuff, struct options *opt, int i)
 
 void condition_display(int ac, struct options *opt, char const *const *av)
 {
-    if (opt->bool_R == 1)
-        display_r(opt, -1);
     if (opt->bool_d == 1)
         display_d(opt);
     if ((opt->bool_l == 1 && opt->bool_tt == 1) || opt->bool_l == 1 ||
@@ -54,4 +52,42 @@ void condition_display(int ac, struct options *opt, char const *const *av)
         display_ls(opt);
     else
         check_invalid_option(ac, av);
+}
+
+void display_l_total_size(int nbr, struct options *opt, struct stat statbuff)
+{
+    char *path_file = malloc(sizeof(char) *
+    (my_strlen(opt->path) + opt->len + 1));
+
+    for (int i = 0; i < nbr; i++) {
+        if (opt->files[i][0] != '.' || opt->bool_a == 1) {
+            path_file = my_strcpy(path_file, opt->path);
+            path_file = my_strcat(path_file, opt->files[i]);
+            stat(path_file, &statbuff);
+            opt->total_size += statbuff.st_blocks / 2;
+        }
+    }
+    my_putstr("total ");
+    my_put_nbr(opt->total_size);
+    my_putchar('\n');
+}
+
+void init_opt(struct options *opt)
+{
+    opt->nbr = 0;
+    opt->len = 0;
+    opt->bool_1 = 0;
+    opt->bool_a_maj = 0;
+    opt->bool_a = 0;
+    opt->bool_d = 0;
+    opt->bool_f = 0;
+    opt->bool_i = 0;
+    opt->bool_l = 0;
+    opt->bool_m = 0;
+    opt->bool_n = 0;
+    opt->bool_o = 0;
+    opt->bool_p = 0;
+    opt->bool_r = 0;
+    opt->bool_tt = 0;
+    opt->dir_bool = 0;
 }

@@ -37,25 +37,14 @@ void check_invalid_option(int ac, char const *const *av)
     }
 }
 
-void get_elements(struct options *opt, int i, char *str)
+void get_elements(struct options *opt)
 {
     DIR *rep;
     struct dirent *lecture;
     opt->nbr = 0;
     opt->len = 0;
-    char *tmp;
 
-    if (i == -1)
-        rep = opendir(opt->path);
-    else {
-        tmp = malloc(sizeof(char) * 100);
-        tmp = my_strcpy(tmp, opt->path);
-        if (str != NULL) {
-            tmp = my_strcat(tmp, str);
-        }
-        tmp = my_strcat(tmp, opt->files[i]);
-        rep = opendir(tmp);
-    }
+    rep = opendir(opt->path);
     check_null_rep(rep, opt);
     lecture = readdir(rep);
     while (lecture) {
@@ -64,10 +53,6 @@ void get_elements(struct options *opt, int i, char *str)
         lecture = readdir(rep);
         opt->nbr++;
     }
-    if (i == -1)
-        opt->maxNbr = opt->nbr;
-    else
-        free(tmp);
     closedir(rep);
 }
 
@@ -75,14 +60,13 @@ int main(int ac, char const *const *av)
 {
     struct options *opt = malloc(sizeof(struct options));
 
-    opt->nbr = 0;
-    opt->len = 0;
-    opt->path = malloc(sizeof(char) * 1);
+    init_opt(opt);
+    opt->path = malloc(sizeof(char) * 3);
     analyse_arg(ac, av, opt);
     if (opt->dir_bool == 0)
         opt->path = my_strcpy(opt->path, "./");
-    get_elements(opt, -1, NULL);
-    create_files(opt, -1, NULL);
+    get_elements(opt);
+    create_files(opt);
     option_a(opt);
     condition_display(ac, opt, av);
     return (0);

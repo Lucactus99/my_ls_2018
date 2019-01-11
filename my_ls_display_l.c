@@ -29,11 +29,11 @@ void display_l_permissions(struct stat statbuff)
         my_putchar('x');
     else
         my_putchar('-');
-    my_putchar(' ');
 }
 
 void display_l_links(struct stat statbuff, struct options *opt, int i)
 {
+    my_putchar(' ');
     put_space_links(statbuff, opt->nbr, i, opt);
     my_put_nbr(statbuff.st_nlink);
     my_putchar(' ');
@@ -57,12 +57,28 @@ void display_l_owner_user(struct stat statbuff, struct options *opt)
     }
 }
 
+void display_l_size_2(struct stat statbuff, struct options *opt, int i)
+{
+    if (S_ISBLK(statbuff.st_mode)) {
+        put_space_size(statbuff, opt->nbr, i, opt);
+        my_put_nbr(major(statbuff.st_rdev));
+        my_putchar(44);
+        put_space_size(statbuff, opt->nbr, i, opt);
+        my_put_nbr(minor(statbuff.st_rdev));
+        my_putchar(' ');
+        return;
+    }
+    put_space_size(statbuff, opt->nbr, i, opt);
+    my_put_nbr(statbuff.st_size);
+    my_putchar(' ');
+}
+
 void display_l_size(struct stat statbuff, struct options *opt, int i)
 {
     if (S_ISCHR(statbuff.st_mode)) {
         put_space_size(statbuff, opt->nbr, i, opt);
         my_put_nbr(major(statbuff.st_rdev));
-        my_putchar(',');
+        my_putchar(44);
         put_space_size(statbuff, opt->nbr, i, opt);
         my_put_nbr(minor(statbuff.st_rdev));
         my_putchar(' ');
@@ -74,31 +90,5 @@ void display_l_size(struct stat statbuff, struct options *opt, int i)
         my_putchar(' ');
         return;
     }
-    if (S_ISBLK(statbuff.st_mode)) {
-        put_space_size(statbuff, opt->nbr, i, opt);
-        my_put_nbr(statbuff.st_size);
-        my_putchar(' ');
-        return;
-    }
-    put_space_size(statbuff, opt->nbr, i, opt);
-    my_put_nbr(statbuff.st_size);
-    my_putchar(' ');
-}
-
-void display_l_total_size(int nbr, struct options *opt, struct stat statbuff)
-{
-    char *path_file = malloc(sizeof(char) *
-    (my_strlen(opt->path) + opt->len + 1));
-
-    for (int i = 0; i < nbr; i++) {
-        if (opt->files[i][0] != '.' || opt->bool_a == 1) {
-            path_file = my_strcpy(path_file, opt->path);
-            path_file = my_strcat(path_file, opt->files[i]);
-            stat(path_file, &statbuff);
-            opt->total_size += statbuff.st_blocks / 2;
-        }
-    }
-    my_putstr("total ");
-    my_put_nbr(opt->total_size);
-    my_putchar('\n');
+    display_l_size_2(statbuff, opt, i);
 }

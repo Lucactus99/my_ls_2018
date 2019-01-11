@@ -5,6 +5,8 @@
 ** Desc
 */
 
+#include "my.h"
+
 char *my_strcpy(char *dest, char const *src)
 {
     int i;

@@ -45,8 +45,6 @@ void check_options_2(char const *const *av, struct options *opt, int i, int j)
 
 void check_options(char const *const *av, struct options *opt, int i, int j)
 {
-    if (av[i][j] == 'R')
-        opt->bool_R = 1;
     if (av[i][j] == 'a')
         opt->bool_a = 1;
     if (av[i][j] == 'A')
@@ -66,10 +64,11 @@ void check_options(char const *const *av, struct options *opt, int i, int j)
 
 void analyse_path(int ac, char const *const *av, struct options *opt)
 {
+    struct stat st;
     int i = 1;
 
     if (ac < 2)
-        return ;
+        return;
     while (av[i][0] == '-' && i < ac - 1)
         i++;
     if (av[i][0] != '-') {
@@ -78,7 +77,8 @@ void analyse_path(int ac, char const *const *av, struct options *opt)
         opt->path = my_strcpy(opt->path, av[i]);
         opt->path_av = malloc(sizeof(char) * (my_strlen(av[i]) + 1));
         opt->path_av = my_strcpy(opt->path_av, opt->path);
-        if (opt->path[my_strlen(opt->path) - 1] != '/')
+        stat(opt->path, &st);
+        if (opt->path[my_strlen(opt->path) - 1] != '/' && S_ISDIR(st.st_mode))
             opt->path = my_strcat(opt->path, "/");
     }
 }

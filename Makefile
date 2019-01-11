@@ -17,7 +17,6 @@ SRC     =   my_ls_main.c \
             my_ls_sorting.c \
             my_ls_display_l.c \
             my_ls_display_ls.c \
-            my_ls_display_R.c \
             my_ls_get_info.c \
             src/my_strlen.c \
             src/my_strcat.c \

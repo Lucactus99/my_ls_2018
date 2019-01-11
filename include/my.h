@@ -42,7 +42,6 @@ struct dates
 
 struct options
 {
-    int maxNbr;
     int nbr;
     int len;
     int dir_bool;
@@ -58,14 +57,11 @@ struct options
     int bool_o;
     int bool_p;
     int bool_r;
-    int bool_R;
     int bool_tt;
     long total_size;
     char *path;
     char *path_av;
     char **files;
-    char **directories;
-    int lines_display;
 };
 
 void my_putchar(char);
@@ -93,7 +89,7 @@ void display_l_owner_user(struct stat, struct options *);
 void display_l_size(struct stat, struct options *, int);
 void display_l_time(struct stat);
 void display_l_total_size(int, struct options *, struct stat);
-void create_files(struct options *, int, char *);
+void create_files(struct options *);
 void condition_display(int, struct options *, char const *const *);
 void check_invalid_option(int, char const *const *);
 void display_i(struct options *, struct stat);
@@ -105,8 +101,7 @@ void print_file(char *);
 void swap_str(char **, char **);
 void check_options(char const *const *, struct options *, int, int);
 void check_options_2(char const *const *, struct options *, int, int);
-void display_r(struct options *, int);
-void get_elements(struct options *, int, char *);
-void display_list_r(struct options *opt, char *path_file);
+void get_elements(struct options *);
+void init_opt(struct options *);
 
 #endif //MY_H_
