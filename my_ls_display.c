@@ -22,7 +22,7 @@ void display_d(struct options *opt)
     find_path(&statbuff, opt, -1);
     if (opt->bool_l == 1) {
         display_i(opt, statbuff);
-        display_l_permissions(statbuff);
+        display_l_permissions(statbuff, opt, 0);
         display_l_links(statbuff, opt, -1);
         display_l_owner_user(statbuff, opt);
         display_l_size(statbuff, opt, -1);
@@ -74,7 +74,7 @@ void display_l(struct options *opt)
         if (opt->files[i][0] != '.' || opt->bool_a == 1) {
             find_path(&statbuff, opt, i);
             display_i(opt, statbuff);
-            display_l_permissions(statbuff);
+            display_l_permissions(statbuff, opt, i);
             display_l_links(statbuff, opt, i);
             display_l_owner_user(statbuff, opt);
             display_l_size(statbuff, opt, i);

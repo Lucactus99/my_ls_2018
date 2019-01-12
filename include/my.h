@@ -10,6 +10,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <string.h>
@@ -83,7 +84,7 @@ void display_l(struct options *);
 void display_a(char **, int, struct options *);
 void display_a_maj(char **, int);
 void display_d(struct options *);
-void display_l_permissions(struct stat);
+void display_l_permissions(struct stat, struct options *, int);
 void display_l_links(struct stat, struct options *, int);
 void display_l_owner_user(struct stat, struct options *);
 void display_l_size(struct stat, struct options *, int);

@@ -7,30 +7,6 @@
 
 #include "my.h"
 
-void display_l_permissions(struct stat statbuff)
-{
-    if (S_ISCHR(statbuff.st_mode))
-        my_putchar('c');
-    else if (S_ISDIR(statbuff.st_mode))
-        my_putchar('d');
-    else
-        my_putstr(S_ISBLK(statbuff.st_mode) ? "b" : "-");
-    my_putstr((statbuff.st_mode & S_IRUSR) ? "r" : "-");
-    my_putstr((statbuff.st_mode & S_IWUSR) ? "w" : "-");
-    my_putstr((statbuff.st_mode & S_IXUSR) ? "x" : "-");
-    my_putstr((statbuff.st_mode & S_IRGRP) ? "r" : "-");
-    my_putstr((statbuff.st_mode & S_IWGRP) ? "w" : "-");
-    my_putstr((statbuff.st_mode & S_IXGRP) ? "x" : "-");
-    my_putstr((statbuff.st_mode & S_IROTH) ? "r" : "-");
-    my_putstr((statbuff.st_mode & S_IWOTH) ? "w" : "-");
-    if (statbuff.st_mode & __S_ISVTX)
-        my_putchar('t');
-    else if (statbuff.st_mode & S_IXOTH)
-        my_putchar('x');
-    else
-        my_putchar('-');
-}
-
 void display_l_links(struct stat statbuff, struct options *opt, int i)
 {
     my_putchar(' ');
